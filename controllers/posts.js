@@ -15,11 +15,28 @@ exports.renderCreatePage = (req, res) => {
 };
 
 exports.renderHomePage = (req, res) => {
-	Post.find().select("title")
+	const cookieHeader = req.get("Cookie");
+
+	let cookie = false
+	if (cookieHeader) {
+		const cookieValue = cookieHeader.split("=")[1]
+		if (cookieValue) {
+			cookie = cookieValue.trim() === "true"
+		}
+	}
+
+
+
+	Post.find()
+		.select("title")
 		.populate("userId", "username")
 		.then((posts) => {
 			console.log(posts);
-			res.render("home", { title: "Home page", postsArr: posts });
+			res.render("home", {
+				title: "Home page",
+				postsArr: posts,
+				isLogin: cookie,
+			});
 		})
 		.catch((err) => console.log(err));
 };
