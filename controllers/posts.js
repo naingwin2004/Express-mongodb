@@ -17,12 +17,11 @@ exports.renderCreatePage = (req, res) => {
 exports.renderHomePage = (req, res) => {
 	Post.find()
 		.select("title")
-		.populate("userId", "username")
+		.populate("userId", "email")
 		.then((posts) => {
 			res.render("home", {
 				title: "Home page",
 				postsArr: posts,
-				isLogin: req.session.isLogin ? true :false
 			});
 		})
 		.catch((err) => console.log(err));
