@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 dotenv.config();
-
+const session = require("express-session");
+const mongoStore = require("connect-mongodb-session")(session);
 const app = express();
 
 app.set("view engine", "ejs");
@@ -15,15 +16,20 @@ const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
 
 const User = require("./models/user");
-
+const store = new mongoStore({
+	uri: process.env.MONGODB_URI,
+	collection: "sessions",
+});
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use((req, res, next) => {
-	User.findById("66fa6f69855ca27587164459").then((user) => {
-		req.user = user;
-		next();
-	});
-});
+app.use(
+	session({
+		secret: process.env.SESSION_KEY,
+		resave: false,
+		saveUninitialized: false,
+		store,
+	}),
+);
 
 app.use("/admin", adminRoutes);
 app.use(postRoutes);
@@ -34,16 +40,5 @@ mongoose
 	.then(() => {
 		app.listen(8000);
 		console.log(" Your server is running on port 8000");
-		return User.findOne().then((user) => {
-			if (!user) {
-				User.create({
-					username: "Naing Win",
-					email: "naingwin.dev@gamil.com",
-					password: "abcdefg",
-				});
-			}
-			return user;
-		});
 	})
-	.then((result) => console.log(result))
 	.catch((err) => console.log(err));
