@@ -3,6 +3,9 @@
     <section class="mx-auto">
       <a href="/">Go back home</a>
       <h1 class="title">Welcome!</h1>
+     <% if(message.length) {%>
+      <p class="error"><%= message %></p>
+      <% }%>
       <form action="/login" method="post">
          <input hidden value="<%= csrfToken %>" name="_csrf"/>
         <div>
@@ -13,6 +16,7 @@
           <label for="password">Enter password</label>
           <input type="text" id="password" name="password" />
         </div>
+        <a href="/reset-password">Forgot password?</a>
         <button>Login Account</button>
       </form>
     </section>

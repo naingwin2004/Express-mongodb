@@ -39,6 +39,7 @@ exports.getPost = (req, res) => {
 
 exports.getEditPost = (req, res) => {
 	const postId = req.params.postId;
+
 	Post.findById(postId)
 		.then((post) => {
 			if (!post) {

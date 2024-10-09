@@ -3,13 +3,6 @@ const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
-/*username: {
-		type: String,
-		unique: true,
-		required: true,
-		minLength: 4,
-		maxLength: 15,
-	},*/
 	email: {
 		type: String,
 		unique: true,
@@ -20,6 +13,8 @@ const userSchema = new Schema({
 		required: true,
 		minLength: 4,
 	},
+	resetToken: String,
+	tokenExpiration: Date
 });
 
 module.exports = model("User", userSchema);

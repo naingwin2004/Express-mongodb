@@ -61,3 +61,6 @@ button {
 .details p {
 	font-size: 17px;
 }
+.error {
+	color: red;
+}
