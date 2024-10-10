@@ -6,7 +6,9 @@
       laborum dolore commodi cum dolorem deleniti soluta, ea nemo.
     </p>
     <% if(isLogin) {%>
-    <a href="/admin/create-post">Add a new post</a>
+    <a href="/admin/create-post">Add a new post =>
+    <%= currentUserEmail %>
+    </a>
     <form action="/logout" method="post">
       <input hidden value="<%= csrfToken %>" name="_csrf"/>
     <button>Logout</button>
@@ -17,13 +19,20 @@
         <% } %>
     <hr />
     <h1 class="title">Posts</h1>
-    <% if(postsArr.length === 0) { %>
+    <% if(postsArr.length === 0 && isLogin) { %>
     <div>
       <h4>Nothing to see ?</h4>
       <p>Create a new post now !!!</p>
       <a href="/admin/create-post">Create a new post</a>
     </div>
-    <% } %> <% for(let post of postsArr) { %>
+    <% } %> 
+   <% if(postsArr.length === 0 && !isLogin) { %>
+    <div>
+      <h4>Nothing to see ?</h4>
+      <p>Register or Login account Now...</p>
+    </div>
+    <% } %>
+    <% for(let post of postsArr) { %>
     <div class="post-box">
       <div>
       <p class="post-title"><%= post.title %></p>

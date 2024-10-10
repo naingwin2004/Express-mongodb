@@ -43,7 +43,6 @@ app.use((req, res, next) => {
 		.select("_id email")
 		.then((user) => {
 			req.user = user;
-			console.log(req.user);
 			next();
 		})
 		.catch((err) => console.log(err));
