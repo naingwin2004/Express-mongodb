@@ -1,9 +1,13 @@
 <%- include("./includes/head") %>
 <section class="details">
     <h1><%= post.title %></h1>
+  <p>Post by - <%= post.userId.email %></p>
+  <% if(date) { %>
+  <p>Upload at - <%= date %></p>
+  <% } %>
     <img src="<%= post.imageUrl %>" alt="<%= post.title %>">
     <p><%= post.description %></p>
-    <% if(post.userId.toString() ===currentLoginUserId.toString()) { %>
+    <% if(post.userId._id.toString() === currentLoginUserId.toString()) { %>
     <form action="/admin/delete/<%= post._id %>" method="post">
        <input hidden value="<%= csrfToken %>" name="_csrf"/>
       <button>Deleted</button>
