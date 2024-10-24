@@ -45,7 +45,7 @@ exports.renderHomePage = (req, res) => {
 		.catch((err) => console.log(err));
 };
 
-exports.getPost = (req, res) => {
+exports.getPost = (req, res,next) => {
 	const postId = req.params.postId;
 	Post.findById(postId)
 		.populate("userId", "email")
@@ -62,7 +62,11 @@ exports.getPost = (req, res) => {
 					: "",
 			});
 		})
-		.catch((err) => console.log(err));
+		.catch((err) => {
+			console.log(err);
+			const error = new Error("Somthing went wrong.")
+			return next(error)
+		});
 };
 
 exports.getEditPost = (req, res) => {

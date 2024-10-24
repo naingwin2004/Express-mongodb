@@ -16,7 +16,11 @@ app.set("views", "views");
 const postRoutes = require("./routes/post");
 const adminRoutes = require("./routes/admin");
 const authRoutes = require("./routes/auth");
+
 const { isLogin } = require("./middleware/is-Login");
+
+const errorController = require("./controllers/error.js");
+
 const User = require("./models/user");
 const store = new mongoStore({
 	uri: process.env.MONGODB_URI,
@@ -34,7 +38,7 @@ app.use(
 	}),
 );
 app.use(csrfProtect);
-app.use(flash())
+app.use(flash());
 app.use((req, res, next) => {
 	if (req.session.isLogin === undefined) {
 		return next();
@@ -57,6 +61,8 @@ app.use("/admin", isLogin, adminRoutes);
 app.use(postRoutes);
 app.use(authRoutes);
 
+app.all("*", errorController.get404Page);
+app.use(errorController.get500Page)
 mongoose
 	.connect(process.env.MONGODB_URL)
 	.then(() => {

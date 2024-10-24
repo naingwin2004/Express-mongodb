@@ -1,33 +1,37 @@
 <%- include("./includes/head") %>
+<div class="hero">
     <h1 class="title">HomePage</h1>
     <p>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad dignissimos
       veniam pariatur autem. Maxime velit eos sint. Tempore quam cumque optio
       laborum dolore commodi cum dolorem deleniti soluta, ea nemo.
     </p>
+</div>
     <% if(isLogin) {%>
     <a href="/admin/create-post">Add a new post =>
     <%= currentUserEmail %>
     </a>
-    <form action="/logout" method="post">
+    <form action="/logout" method="post" class="form">
       <input hidden value="<%= csrfToken %>" name="_csrf"/>
     <button>Logout</button>
     </form>
     <% }else { %>
-    <a href="/login">Login account?</a>
-    <a href="/register">Register a new account</a>
+    <div class="link">
+     <a href="/login">Login account?</a>
+     <a href="/register">Register a new account</a>
+    </div>
         <% } %>
     <hr />
     <h1 class="title">Posts</h1>
     <% if(postsArr.length === 0 && isLogin) { %>
-    <div>
+    <div class="nothing">
       <h4>Nothing to see ?</h4>
       <p>Create a new post now !!!</p>
       <a href="/admin/create-post">Create a new post</a>
     </div>
     <% } %> 
    <% if(postsArr.length === 0 && !isLogin) { %>
-    <div>
+    <div class="nothing">
       <h4>Nothing to see ?</h4>
       <p>Register or Login account Now...</p>
     </div>
@@ -36,7 +40,7 @@
     <div class="post-box">
       <div>
       <p class="post-title"><%= post.title %></p>
-      <p class="post-title"><%= post.description %></p>
+      <p class="post-description"><%= post.description %></p>
       <p>Post by <%= post.userId.email %></p>
       </div>
       <a class="btn" href="/post/<%= post._id %>">See More...</a>
