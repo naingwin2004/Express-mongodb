@@ -1,38 +1,33 @@
-<%- include("./includes/head") %>
 
-    <section class="mx-auto">
-      <a href="/">Go back home</a>
-      <h1 class="title">Add a new post here!</h1>
-          <% if(message.length) {%>
+<%- include("./includes/head") %>
+    <section class="add">
+      <h1>Editing post!</h1>
+    <% if(message.length) {%>
       <p class="error"><%= message %></p>
       <% }%>
-      <form action="/admin/edit-post" method="post" novalidate>
+      <form action="/admin/edit-post" method="post" enctype="multipart/form-data">
          <input hidden value="<%= csrfToken %>" name="_csrf"/>
-       <input type="text" 
-          value="<%=isValidationFail?postId: post._id %>" name="postId" hidden/>
-        <div>
+         <input hidden value="<%= postId %>" name="postId"/>
+        <div class="add-title">
           <label for="title">Enter title</label>
-          <input type="text" id="title" 
-          value="<%=isValidationFail?oldFromData.title: post.title %>" name="title" required />
+          <input type="text" id="title" name="title" value="<%= oldFromData.title %>"/>
         </div>
-        <div>
+        <div class="add-img">
           <label for="photo">Enter photo</label>
-          <input type="text" id="photo" name="photo" required 
-          value="<%=isValidationFail?oldFromData.photo: post.imageUrl %>" 
-          />
+          <input type="file" id="photo" name="photo"/>
         </div>
-        <div>
+        <div class="add-description">
           <label for="description">Enter description</label>
           <textarea
             name="description"
             id="description"
             cols="30"
             rows="10"
-          ><%=isValidationFail?oldFromData.description: post.description %>
-
-          </textarea>
+           
+          ><%= oldFromData.description %></textarea>
         </div>
-        <button>Edit Post</button>
+        <button class="custom-button">Update post</button>
       </form>
     </section>
+  </body>
   <%- include("./includes/foot") %>

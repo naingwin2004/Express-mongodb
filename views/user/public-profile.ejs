@@ -1,0 +1,29 @@
+<%- include("../includes/head") %>
+    <section class="main">
+      <h1>Posts by : <%= postsArr[0].userId.username ?
+        postsArr[0].userId.username : currentUserEmail %></h1>
+        <div class="post-grid">
+    <% for(let post of postsArr) { %>
+     <div class="post-box">
+      <div>
+        <a href="/post/<%= post._id %>">
+        <p class="post-title"><%= post.title %></p>
+        <img src="<%= '/' + post.imageUrl %>" alt="<%= post.title %>" class="post-img"/>
+        <p class="post-description"><%= post.description %>
+        </p>
+        <a href="/profile/<%= post.userId._id %>" class="post-link"><span><i class="fa-solid fa-user"></i></span><%= post.userId.username ? post.userId.username : post.userId.email%></a>
+         </a>
+      </div>
+    </div>
+    <% } %> 
+  </div>
+  <div class="pagination">
+  <% if (hasPreviousPage) { %>
+       <a href="/profile/<%= postsArr[0].userId._id.toString() %>?page=<%= previousPage %>" class="custom-button2 previous">Previous Page <%= previousPage %></a>
+    <% } %>
+    <% if (hasNextPage) { %>
+      <a href="/profile/<%= postsArr[0].userId._id.toString() %>?page=<%= nextPage %>" class="custom-button next">Next Page <%= nextPage %></a>
+    <% } %>
+  </div>
+    </section>
+<%- include("../includes/foot") %>

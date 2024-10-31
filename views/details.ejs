@@ -1,17 +1,18 @@
 <%- include("./includes/head") %>
 <section class="details">
     <h1><%= post.title %></h1>
-  <p>Post by - <%= post.userId.email %></p>
+       <a href="/profile/<%= post.userId._id %>" class="post-link"><span><i class="fa-solid fa-user"></i></span><%= post.userId.username ? post.userId.username : post.userId.email%></a>
+       </a>
   <% if(date) { %>
-  <p>Upload at - <%= date %></p>
+    <p>Upload at - <%= date %></p>
   <% } %>
-    <img src="<%= post.imageUrl %>" alt="<%= post.title %>">
+    <img src="<%= '/' + post.imageUrl %>" alt="<%= post.title %>">
     <p><%= post.description %></p>
     <% if(post.userId._id.toString() === currentLoginUserId.toString()) { %>
     <form action="/admin/delete/<%= post._id %>" method="post">
        <input hidden value="<%= csrfToken %>" name="_csrf"/>
-      <button>Deleted</button>
-    <a href="/admin/edit/<%= post._id %>">Edit</a>
+      <button class="custom-button2">Deleted</button>
+    <a href="/admin/edit/<%= post._id %>" class="custom-button">Edit</a>
     </form>
     <% } %>
 </section>

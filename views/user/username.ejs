@@ -1,16 +1,16 @@
 <%- include("../includes/head") %>
     <section class="account">
-      <h1 class="title">Reset password here!</h1>
+      <h1 class="title">Set User Name Here!</h1>
      <% if(message.length) {%>
       <p class="error"><%= message %></p>
       <% }%>
-      <form action="/reset" method="post">
+      <form action="/admin/setusername" method="post">
          <input hidden value="<%= csrfToken %>" name="_csrf"/>
         <div class="account-email">
-          <label for="email">Enter Email</label>
-          <input type="text" id="email" name="email" />
+          <label for="username">Enter username</label>
+          <input type="text" id="username" name="username" />
         </div>
-        <button class="custom-button2">Reset password</button>
+        <button class="custom-button2">Set UserName</button>
       </form>
     </section>
   </body>

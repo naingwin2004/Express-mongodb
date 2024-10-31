@@ -47,7 +47,10 @@ exports.register = (req, res) => {
 					from: process.env.SENDER_MAIL,
 					to: email,
 					subject: "Register",
-					html: "<div><h1>Register success</h1><p>Welcome!!!</p></div>",
+					html: `<div style="background-color: #fff4e6; color: #4b3832; font-family: Arial, sans-serif; text-align: center; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 300px; margin: 50px auto;">
+    <h2 style="color: #854442;">Register Complete</h2>
+    <p style="color: #3c2f2f; font-size: 16px; margin-top:20px;">Welcome! Your registration is complete. Thank you for joining us!</p>
+</div>`,
 				},
 				(err) => {
 					if (err) {
@@ -169,7 +172,11 @@ exports.resetLinkSend = (req, res) => {
 						from: process.env.SENDER_MAIL,
 						to: email,
 						subject: "Reset Password",
-						html: `<div><h1>Reset Password Now.</h1><a href="http://localhost:8000/reset-password/${token}">Click me</a></div>`,
+						html: `<div style="background-color: #fff4e6; border: 2px solid #854442; border-radius: 10px; padding: 20px; text-align: center; color: #4b3832; max-width: 500px; margin: auto; font-family: Arial, sans-serif;">
+    <h1 style="color: #4b3832;">Reset Your Password Now</h1>
+    <p style="margin: 10px 0;">We received a request to reset your password. Click the button below to reset it:</p>
+    <a href="http://localhost:8000/reset-password/${token}" style="display: inline-block; background-color: #854442; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Reset Password</a>
+</div>`,
 					},
 					(err) => {
 						if (err) {
@@ -193,9 +200,10 @@ exports.getNewpasswordPage = (req, res) => {
 			if (user) {
 				res.render("auth/new-password", {
 					title: "Change password",
-					message: req.flash("error"),
+					message: "",
 					resetToken: token,
 					user_id: user._id,
+					oldFormData: { password: "" },
 				});
 			} else {
 				res.redirect("/");
@@ -205,43 +213,37 @@ exports.getNewpasswordPage = (req, res) => {
 };
 
 exports.changeNewpassword = (req, res) => {
-	const { password, confirm_password, user_id, resetToken } = req.body;
+	const { password, user_id, resetToken } = req.body;
+
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(422).render("auth/new-password", {
+			title: "Change password",
+			resetToken,
+			user_id,
+			message: errors.array()[0].msg,
+			oldFormData: { password },
+		});
+	}
 
 	let resetUser;
-
 	User.findOne({
 		resetToken,
 		tokenExpiration: { $gt: Date.now() },
 		_id: user_id,
 	})
 		.then((user) => {
-			if (!user) {
-				console.log("usernot found");
-				req.flash("error", "User not found or token expired");
-				return res.redirect("/reset-password");
-			}
 			resetUser = user;
-			if (password === confirm_password) {
-				return bcrypt.hash(password, 10);
-			} else {
-				req.flash("error", "Passwords do not match");
-				return res.redirect(`/reset-password/${resetToken}`);
-			}
+			return bcrypt.hash(password, 10);
 		})
 		.then((hashedPassword) => {
-			if (!resetUser) return;
 			resetUser.password = hashedPassword;
 			resetUser.resetToken = undefined;
 			resetUser.tokenExpiration = undefined;
 			return resetUser.save();
 		})
 		.then(() => {
-			if (resetUser) {
-				res.redirect("/login");
-			}
+			res.redirect("login");
 		})
-		.catch((err) => {
-			console.log(err);
-			req.flash("error", "Something went wrong");
-		});
+		.catch((err) => console.log(err));
 };

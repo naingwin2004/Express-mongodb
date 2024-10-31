@@ -8,6 +8,8 @@ const session = require("express-session");
 const mongoStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const multer = require("multer");
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -21,14 +23,43 @@ const { isLogin } = require("./middleware/is-Login");
 
 const errorController = require("./controllers/error.js");
 
+const storageConfig = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "images");
+	},
+	filename: (req, file, cb) => {
+		const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+		cb(null, uniqueSuffix + "-" + file.originalname);
+	},
+});
+
+const fileFilterConfig = (req, file, cb) => {
+	const imgType =
+		file.mimetype === "image/png" ||
+		file.mimetype === "image/jpg" ||
+		file.mimetype === "image/jpeg";
+	if (imgType) {
+		cb(null, true);
+	} else {
+		cb(null, false);
+	}
+};
+
 const User = require("./models/user");
 const store = new mongoStore({
 	uri: process.env.MONGODB_URI,
 	collection: "sessions",
 });
-app.use(express.static(path.join(__dirname, "public")));
-app.use(bodyParser.urlencoded({ extended: false }));
 const csrfProtect = csrf();
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+	multer({ storage: storageConfig, fileFilter: fileFilterConfig }).single(
+		"photo",
+	),
+);
+
 app.use(
 	session({
 		secret: process.env.SESSION_KEY,
@@ -62,7 +93,7 @@ app.use(postRoutes);
 app.use(authRoutes);
 
 app.all("*", errorController.get404Page);
-app.use(errorController.get500Page)
+app.use(errorController.get500Page);
 mongoose
 	.connect(process.env.MONGODB_URL)
 	.then(() => {

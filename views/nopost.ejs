@@ -1,0 +1,16 @@
+<%- include("./includes/head") %>
+   <% if(isLogin) { %>
+    <div class="nothing">
+      <h4>Nothing to see ?</h4>
+      <p>Create a new post now !!!</p>
+      <a href="/admin/create-post" class="custom-button2">Create a new post</a>
+    </div>
+    <% } %> 
+   <% if(!isLogin) { %>
+    <div class="nothing">
+      <h4>Nothing to see ?</h4>
+      <p>Register or Login account Now...</p>
+    </div>
+    <% } %>
+
+<%- include("./includes/foot") %>

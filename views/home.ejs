@@ -1,49 +1,33 @@
 <%- include("./includes/head") %>
-<div class="hero">
-    <h1 class="title">HomePage</h1>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad dignissimos
-      veniam pariatur autem. Maxime velit eos sint. Tempore quam cumque optio
-      laborum dolore commodi cum dolorem deleniti soluta, ea nemo.
-    </p>
-</div>
-    <% if(isLogin) {%>
-    <a href="/admin/create-post">Add a new post =>
-    <%= currentUserEmail %>
-    </a>
-    <form action="/logout" method="post" class="form">
-      <input hidden value="<%= csrfToken %>" name="_csrf"/>
-    <button>Logout</button>
-    </form>
-    <% }else { %>
-    <div class="link">
-     <a href="/login">Login account?</a>
-     <a href="/register">Register a new account</a>
-    </div>
-        <% } %>
-    <hr />
+  <div class="main">
     <h1 class="title">Posts</h1>
-    <% if(postsArr.length === 0 && isLogin) { %>
-    <div class="nothing">
-      <h4>Nothing to see ?</h4>
-      <p>Create a new post now !!!</p>
-      <a href="/admin/create-post">Create a new post</a>
-    </div>
-    <% } %> 
-   <% if(postsArr.length === 0 && !isLogin) { %>
-    <div class="nothing">
-      <h4>Nothing to see ?</h4>
-      <p>Register or Login account Now...</p>
-    </div>
-    <% } %>
+  <div class="post-grid">
     <% for(let post of postsArr) { %>
     <div class="post-box">
       <div>
-      <p class="post-title"><%= post.title %></p>
-      <p class="post-description"><%= post.description %></p>
-      <p>Post by <%= post.userId.email %></p>
+        <a href="/post/<%= post._id %>">
+        <p class="post-title"><%= post.title %></p>
+        <img src="<%= post.imageUrl %>" alt="<%= post.title %>" class="post-img"/>
+        <p class="post-description"><%= post.description.substring(0,50) %><span>...</span>
+        </p>
+        <% if(post.userId._id.toString() == currentUserId.toString()) { %>
+        <a href="/admin/profile" class="post-link"><span><i class="fa-solid fa-user"></i></span><%= post.userId.username ? post.userId.username : post.userId.email%></a>
+         </a>        
+        <% }else { %>
+        <a href="/profile/<%= post.userId._id %>" class="post-link"><span><i class="fa-solid fa-user"></i></span><%= post.userId.username ? post.userId.username : post.userId.email%></a>
+         </a>
+        <% } %>
       </div>
-      <a class="btn" href="/post/<%= post._id %>">See More...</a>
     </div>
+    <% } %> 
+  </div>
+  <div class="pagination">
+  <% if (hasPreviousPage) { %>
+       <a href="/?page=<%= previousPage %>" class="custom-button2 previous">Previous Page <%= previousPage %></a>
     <% } %>
+    <% if (hasNextPage) { %>
+      <a href="/?page=<%= nextPage %>" class="custom-button next">Next Page <%= nextPage %></a>
+    <% } %>
+  </div>
+  </div>
     <%- include("./includes/foot") %>

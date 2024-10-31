@@ -1,23 +1,24 @@
-<%- include("../includes/head") %>
 
-    <section class="mx-auto">
-      <a href="/">Go back home</a>
-      <h1 class="title">Welcome!</h1>
+<%- include("../includes/head") %>
+   <section class="account">
+      <h1 class="title">Welcome Back!</h1>
      <% if(message.length) {%>
       <p class="error"><%= message %></p>
       <% }%>
       <form action="/login" method="post">
          <input hidden value="<%= csrfToken %>" name="_csrf"/>
-        <div>
+        <div class="account-email">
           <label for="email">Enter Email</label>
           <input type="text" id="email" name="email" value="<%= oldFromData.email %>" />
         </div>
-        <div>
+        <div class="account-password">
           <label for="password">Enter password</label>
           <input type="text" id="password" name="password" value="<%= oldFromData.password %>" />
         </div>
-        <a href="/reset-password">Forgot password?</a>
-        <button>Login Account</button>
+        <div class="account-action">
+        <a href="/reset-password" class="custom-button2">Forgot password?</a>
+        <button class="custom-button">Login Account</button>
+        </div>
       </form>
     </section>
   </body>

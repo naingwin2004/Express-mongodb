@@ -34,13 +34,23 @@ router.post(
 );
 router.post("/logout", authController.logout);
 
-router.get(
-	"/reset-password",
-	authController.getRest,
-);
+router.get("/reset-password", authController.getRest);
 router.get("/feedback", authController.getFeedback);
-router.post("/reset",body("email").isEmail().withMessage("Please enter a valid email..."), authController.resetLinkSend);
+router.post(
+	"/reset",
+	body("email").isEmail().withMessage("Please enter a valid email..."),
+	authController.resetLinkSend,
+);
 router.get("/reset-password/:token", authController.getNewpasswordPage);
-router.post("/change-new-password", authController.changeNewpassword);
+router.post(
+	"/change-new-password",
+	[
+		body("password")
+			.isLength({ min: 4 })
+			.trim()
+			.withMessage("Password must be 4 character"),
+	],
+	authController.changeNewpassword,
+);
 
 module.exports = router;

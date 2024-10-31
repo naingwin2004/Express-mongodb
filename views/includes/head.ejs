@@ -5,5 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
   </head>
   <body>
+    <nav>
+      <a href="/">
+        <h1>Blog.io</h1>
+      </a>
+      <div>
+      <% if(isLogin) { %>
+      <div class="nav-islogin">
+         <a href="/admin/create-post" class="custom-button2">Create Post
+         </a>
+         <a href="/admin/profile" class="profile">
+           <i class="fa-regular fa-user"></i>
+         </a>
+         <form action="/logout" method="post" class="form">
+         <input hidden value="<%= csrfToken %>" name="_csrf"/>
+         <button class="custom-button">Logout</button>
+         </form>
+      </div>
+         <% }else { %>
+        <div class="link">
+         <a href="/login" class="custom-button">Login?</a>
+         <a href="/register" class="custom-button2">Register</a>
+        </div>
+      <% } %>
+      </div>
+    </nav>

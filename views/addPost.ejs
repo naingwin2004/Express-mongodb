@@ -1,22 +1,20 @@
 <%- include("./includes/head") %>
-
-    <section class="mx-auto">
-      <a href="/">Go back home</a>
-      <h1 class="title">Add a new post here!</h1>
+    <section class="add">
+      <h1>Add a new post here!</h1>
     <% if(message.length) {%>
       <p class="error"><%= message %></p>
       <% }%>
-      <form action="/admin" method="post" novalidate>
+      <form action="/admin" method="post" enctype="multipart/form-data">
          <input hidden value="<%= csrfToken %>" name="_csrf"/>
-        <div>
+        <div class="add-title">
           <label for="title">Enter title</label>
           <input type="text" id="title" name="title" value="<%= oldFromData.title %>"/>
         </div>
-        <div>
+        <div class="add-img">
           <label for="photo">Enter photo</label>
-          <input type="text" id="photo" name="photo" value="<%= oldFromData.photo %>"/>
+          <input type="file" id="photo" name="photo"/>
         </div>
-        <div>
+        <div class="add-description">
           <label for="description">Enter description</label>
           <textarea
             name="description"
@@ -26,7 +24,7 @@
            
           ><%= oldFromData.description %></textarea>
         </div>
-        <button>Add Post</button>
+        <button class="custom-button">Add Post</button>
       </form>
     </section>
   </body>
