@@ -175,7 +175,8 @@ exports.resetLinkSend = (req, res) => {
 						html: `<div style="background-color: #fff4e6; border: 2px solid #854442; border-radius: 10px; padding: 20px; text-align: center; color: #4b3832; max-width: 500px; margin: auto; font-family: Arial, sans-serif;">
     <h1 style="color: #4b3832;">Reset Your Password Now</h1>
     <p style="margin: 10px 0;">We received a request to reset your password. Click the button below to reset it:</p>
-    <a href="http://localhost:8000/reset-password/${token}" style="display: inline-block; background-color: #854442; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Reset Password</a>
+    
+    <a href="${req.protocol}://${req.get('host')}/reset-password/${token}" style="display: inline-block; background-color: #854442; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Reset Password</a>
 </div>`,
 					},
 					(err) => {
